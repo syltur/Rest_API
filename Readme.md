@@ -1,1 +1,1 @@
-https://restapi.syltur.repl.co
+https://bookingapp.syltur.repl.co/
