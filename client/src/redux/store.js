@@ -11,12 +11,24 @@ const rootReducer = combineReducers({
   seats,
 });
 
-const store = createStore(
-  rootReducer,
-  compose(
-		applyMiddleware(thunk),
-		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-	)
-);
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
+
+const enhancer = composeEnhancers(applyMiddleware(thunk));
+
+const store = createStore(rootReducer, enhancer);
+
+// const store = createStore(
+//   rootReducer,
+//   compose(
+//     applyMiddleware(thunk),
+//     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+//     (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+//       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()) ||
+//       compose
+//   )
+// );
 
 export default store;

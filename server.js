@@ -8,17 +8,12 @@ const seatsRoutes = require('./routes/seats.routes');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
 
-const MONGO_USERNAME = 'john-doe';
-const MONGO_PASSWORD = 'SCRAM';
-const MONGO_HOSTNAME = 'cluster0.dutnfbz.mongodb.net';
-const MONGO_DATABASE = 'company';
-
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-mongoose.connect(`mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/${MONGO_DATABASE}`, options);
+mongoose.connect('mongodb+srv://john-doe:SCRAM@cluster0.dutnfbz.mongodb.net/?retryWrites=true&w=majority', options);
 
 const db = mongoose.connection;
 
