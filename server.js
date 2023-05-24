@@ -9,10 +9,13 @@ const concertsRoutes = require('./routes/concerts.routes');
 const seatsRoutes = require('./routes/seats.routes');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+require('dotenv').config();
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/client/build')));
 
+app.use(helmet());
 app.use(cors());
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
@@ -40,16 +43,20 @@ let dbUri = '';
 if (NODE_ENV === 'test') {
   dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
 } else {
-  dbUri =
+  dbUri = 
   'mongodb+srv://john-doe:SCRAM@cluster0.dutnfbz.mongodb.net/?retryWrites=true&w=majority';
 }
+
 mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
+
 db.once('open', () => {
+  // console.log('Connected to the database');
 });
 db.on('error', (err) => console.log('Error ' + err));
 
 const server = app.listen(process.env.PORT || 8000, () => {
+  // console.log('Server is running on port: 8000');
 });
 
 const io = socket(server);
@@ -59,3 +66,48 @@ io.on('connection', (socket) => {
 });
 
 module.exports = server;
+
+// app.get('/testimonials/random', (req, res) => {
+//   const random = Math.floor(Math.random() * db.testimonials.length);
+//   res.json(db.testimonials[random]);
+// });
+
+// app.get('/testimonials', (req, res) => {
+//   res.json(db.testimonials);
+// });
+
+// app.get('/testimonials/:id', (req, res) => {
+//   res.json(db.testimonials.filter((element) => element.id == req.params.id));
+// });
+
+// app.post('/testimonials', (req, res) => {
+//   db.testimonials.push({
+//     id: uuidv4(),
+//     author: req.body.author,
+//     text: req.body.text,
+//   });
+
+//   res.json({ message: 'OK' });
+// });
+
+// app.put('/testimonials/:id', (req, res) => {
+//   db.testimonials.map((element) => {
+//     if (element.id == req.params.id) {
+//       element.author = req.body.author;
+//       element.text = req.body.text;
+//     } else {
+//       return element;
+//     }
+//   });
+
+//   res.json({ message: 'OK' });
+// });
+
+// app.delete('/testimonials/:id', (req, res) => {
+//   const index = db.testimonials.findIndex(
+//     (element) => element.id == req.params.id
+//   );
+//   db.testimonials.splice(index, 1);
+
+//   res.json({ message: 'OK' });
+// });
